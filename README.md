@@ -28,6 +28,27 @@ This project goes beyond word-by-word translation by understanding sentence stru
 
 ---
 
+## 🧩 System Architecture (High-Level)
+```text
+English Speech Video
+↓
+Audio Extraction
+↓
+Speech-to-Text (Whisper)
+↓
+NLP Parsing (spaCy)
+↓
+ISL Grammar Reordering (SOV)
+↓
+Asset Mapping (Word / Alphabet)
+↓
+Video Stitching (MoviePy)
+↓
+Final ISL Output Video
+```
+---
+
+
 ## 🗂️ Project Structure
 ```text
 ISL/
@@ -49,12 +70,14 @@ ISL/
 └── README.md
 ```
 
-##**🛠️ Tech Stack**
-**Frontend:** Streamlit
-**Speech AI:** OpenAI Whisper
-**NLP: **spaCy
-**Video Engine:** MoviePy & OpenCV
-**System:** FFmpeg (for video encoding)
+## 🛠️ Tech Stack
+
+- **Frontend:** Streamlit  
+- **Speech AI:** OpenAI Whisper  
+- **NLP:** spaCy  
+- **Video Engine:** MoviePy & OpenCV  
+- **System:** FFmpeg (for video encoding)
+
 
 ## 📦 Installation & Setup
 
@@ -62,7 +85,7 @@ Follow these steps to get the project running on your local machine.
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/](https://github.com/)<your-username>/ISL.git
+git clone [https://github.com/](https://github.com/)<srinithi0406/>/ISL.git
 cd ISL
 ```
 **2. Set Up a Virtual Environment**
@@ -102,7 +125,7 @@ sudo apt install ffmpeg
 1. Download the "essentials" build from gyan.dev.
 2. Extract the folder and add the bin directory to your System PATH.
 
-▶️** Running the Application**
+▶️**Running the Application**
 Once the setup is complete, launch the Streamlit interface:
 
 ```bash
@@ -110,3 +133,37 @@ Once the setup is complete, launch the Streamlit interface:
 streamlit run app.py
 ```
 The application will automatically open in your browser at http://localhost:8501.
+
+---
+
+**🤟ISL Asset Handling Logic**
+If a word-level ISL video exists, it is used directly
+If not, the system finger-spells the word letter-by-letter
+Asset naming format:
+```text
+
+hello.mp4
+time.mp4
+A.mp4
+B.mp4
+```
+---
+**🔮 Future Enhancements**
+Avatar-based ISL generation (3D / pose estimation)
+Support for non-manual grammar markers
+Real-time speech-to-ISL translation
+Expanded ISL vocabulary coverage
+Mobile and low-bandwidth optimization
+
+---
+**📜 License**
+
+This project is intended for educational and research purposes.
+ISL video assets should be used responsibly and with proper permissions.
+
+---
+
+**🤝 Acknowledgements**
+
+Built with the goal of improving accessibility and inclusive communication
+for the Indian Deaf community 🇮🇳
