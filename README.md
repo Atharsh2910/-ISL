@@ -166,4 +166,4 @@ ISL video assets should be used responsibly and with proper permissions.
 **🤝 Acknowledgements**
 
 Built with the goal of improving accessibility and inclusive communication
-for the Indian Deaf community 🇮🇳
+for the Indian Hearing Impaired community 🇮🇳
