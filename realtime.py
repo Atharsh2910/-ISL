@@ -412,7 +412,7 @@ class ISLVideoApp:
         fps = cap.get(cv2.CAP_PROP_FPS)
         if fps == 0:
             fps = 30
-        SLOW_FACTOR=1.3
+        SLOW_FACTOR=1
         delay = int((1000 / fps)*SLOW_FACTOR)
         
         while cap.isOpened() and self.is_playing:

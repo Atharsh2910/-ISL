@@ -197,27 +197,32 @@ def text_to_isl(text):
 # =====================================================
 
 ASSET_DIR = "./assets"
-DISPLAY_TIME_WORD = 2.5
-DISPLAY_TIME_LETTER = 0.8
+DISPLAY_TIME_WORD = 1.8
+DISPLAY_TIME_LETTER = 1.8
 
 
 def isl_tokens_to_clips(isl_tokens):
     clips = []
     for token in isl_tokens:
-        token = token.lower()
-        video_path = os.path.join(ASSET_DIR, f"{token}.mp4")
+        token_lower = token.title()
+        video_path = os.path.join(ASSET_DIR, f"{token_lower}.mp4")
 
+        # Case 1: whole word exists
         if os.path.exists(video_path):
             clips.append(VideoFileClip(video_path).with_duration(DISPLAY_TIME_WORD))
-        else:
-            for ch in token:
-                if ch.isalpha():
-                    letter_path = os.path.join(ASSET_DIR, f"{ch.upper()}.mp4")
-                    if os.path.exists(letter_path):
-                        clips.append(
-                            VideoFileClip(letter_path).with_duration(DISPLAY_TIME_LETTER)
-                        )
+            continue
+
+        # Case 2: fallback → spell letter by letter
+        for ch in token_lower:
+            if ch.isalpha():
+                letter_path = os.path.join(ASSET_DIR, f"{ch.upper()}.mp4")
+                if os.path.exists(letter_path):
+                    clips.append(
+                        VideoFileClip(letter_path).with_duration(DISPLAY_TIME_LETTER)
+                    )
+
     return clips
+
 
 # =====================================================
 # 5. SAVE FINAL VIDEO

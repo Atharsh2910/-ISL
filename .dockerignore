@@ -1,0 +1,6 @@
+__pycache__
+venv/
+*.pyc
+*.log
+.git
+temp_audio.wav

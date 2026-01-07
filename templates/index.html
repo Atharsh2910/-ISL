@@ -5,7 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VISTA | English to ISL Translation</title>
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --navy: #213448;
+            --steel: #547792;
+            --soft: #94B4C1;
+            --cream: #EAE0CF;
+            --dark-navy: #16222E;
+            --darker-steel: #3D5A6D;
+            --light-blue: #B8D4E3;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -13,8 +26,8 @@
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--navy) 50%, var(--steel) 100%);
             min-height: 100vh;
             padding: 20px;
         }
@@ -22,80 +35,140 @@
         .container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
             overflow: hidden;
+            backdrop-filter: blur(10px);
         }
 
         .header {
-            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--navy) 50%, var(--steel) 100%);
             color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 50px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, transparent 30%, rgba(148, 180, 193, 0.1) 50%, transparent 70%);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
 
         .header h1 {
             font-size: 3em;
             margin-bottom: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .header p {
             font-size: 1.2em;
-            opacity: 0.9;
+            color: var(--light-blue);
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
         }
 
         .main-content {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            padding: 30px;
+            gap: 0;
+            background: linear-gradient(to bottom, #f8f9fa 0%, #e8eef2 100%);
         }
 
         .panel {
-            background: #f9f9f9;
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: white;
+            padding: 40px;
+            position: relative;
+        }
+
+        .panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--steel), var(--soft));
         }
 
         .panel h2 {
-            color: #333;
-            margin-bottom: 20px;
-            font-size: 1.8em;
-            border-bottom: 3px solid #4CAF50;
-            padding-bottom: 10px;
+            color: var(--dark-navy);
+            margin-bottom: 30px;
+            font-size: 1.5em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .panel h2::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            background: var(--steel);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--steel);
         }
 
         .mode-selector {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 30px;
             flex-wrap: wrap;
+            background: linear-gradient(135deg, var(--soft) 0%, var(--steel) 100%);
+            padding: 6px;
+            border-radius: 10px;
         }
 
         .mode-btn {
             flex: 1;
             min-width: 100px;
-            padding: 12px 20px;
-            border: 2px solid #4CAF50;
-            background: white;
-            color: #4CAF50;
+            padding: 14px 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
             border-radius: 8px;
             cursor: pointer;
-            font-size: 1em;
-            font-weight: bold;
-            transition: all 0.3s;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Poppins', sans-serif;
         }
 
         .mode-btn.active {
-            background: #4CAF50;
-            color: white;
+            background: white;
+            color: var(--navy);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: scale(1.02);
         }
 
         .mode-btn:hover {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--navy);
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
         }
 
         .input-section {
@@ -108,33 +181,76 @@
 
         textarea {
             width: 100%;
-            min-height: 150px;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
+            min-height: 160px;
+            padding: 18px;
+            border: 2px solid var(--soft);
+            border-radius: 10px;
             font-size: 1em;
-            font-family: inherit;
+            font-family: 'Poppins', sans-serif;
             resize: vertical;
-            transition: border-color 0.3s;
+            transition: all 0.3s;
+            color: var(--dark-navy);
+            background: linear-gradient(to bottom, #ffffff, #f8f9fa);
         }
 
         textarea:focus {
             outline: none;
-            border-color: #4CAF50;
+            border-color: var(--steel);
+            box-shadow: 0 0 0 4px rgba(84, 119, 146, 0.1);
+            background: white;
         }
 
         .file-upload {
-            border: 2px dashed #4CAF50;
-            border-radius: 8px;
-            padding: 40px;
+            border: 3px dashed var(--steel);
+            border-radius: 12px;
+            padding: 50px 40px;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s;
+            background: linear-gradient(135deg, rgba(148, 180, 193, 0.1) 0%, rgba(84, 119, 146, 0.1) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .file-upload::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+            background: rgba(84, 119, 146, 0.1);
+            border-radius: 50%;
+            transition: all 0.5s;
+        }
+
+        .file-upload:hover::before {
+            width: 500px;
+            height: 500px;
         }
 
         .file-upload:hover {
-            background: #f0f8f0;
-            border-color: #45a049;
+            border-color: var(--navy);
+            background: linear-gradient(135deg, rgba(148, 180, 193, 0.2) 0%, rgba(84, 119, 146, 0.2) 100%);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(84, 119, 146, 0.2);
+        }
+
+        .file-upload p {
+            color: var(--navy);
+            font-weight: 600;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+            position: relative;
+            z-index: 1;
+        }
+
+        .file-upload small {
+            color: var(--steel);
+            font-size: 0.9em;
+            position: relative;
+            z-index: 1;
         }
 
         .file-upload input {
@@ -143,90 +259,147 @@
 
         .btn {
             width: 100%;
-            padding: 15px;
+            padding: 16px;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1em;
-            font-weight: bold;
+            border-radius: 10px;
+            font-size: 1em;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            margin-top: 15px;
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 400px;
+            height: 400px;
         }
 
         .btn-primary {
-            background: #4CAF50;
+            background: linear-gradient(135deg, var(--steel) 0%, var(--darker-steel) 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(84, 119, 146, 0.3);
         }
 
         .btn-primary:hover:not(:disabled) {
-            background: #45a049;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3);
+            background: linear-gradient(135deg, var(--navy) 0%, var(--dark-navy) 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(33, 52, 72, 0.4);
         }
 
         .btn-danger {
-            background: #f44336;
+            background: linear-gradient(135deg, #8B4444 0%, #6B3434 100%);
             color: white;
+            box-shadow: 0 4px 15px rgba(139, 68, 68, 0.3);
         }
 
         .btn-danger:hover:not(:disabled) {
-            background: #da190b;
+            background: linear-gradient(135deg, #6B3434 0%, #4B2424 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(107, 52, 52, 0.4);
         }
 
         .btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
         }
 
         .video-container {
-            background: #1a1a1a;
+            background: linear-gradient(135deg, var(--dark-navy) 0%, var(--navy) 100%);
             border-radius: 12px;
-            padding: 20px;
+            padding: 25px;
             min-height: 400px;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .video-container::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 12px;
+            padding: 2px;
+            background: linear-gradient(135deg, var(--steel), var(--soft));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
         }
 
         .video-container video {
             max-width: 100%;
             max-height: 400px;
             border-radius: 8px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
         .video-placeholder {
-            color: #666;
+            color: var(--light-blue);
             text-align: center;
-            font-size: 1.2em;
+            font-size: 1.1em;
+            font-weight: 400;
         }
 
         .transcript-box {
-            background: white;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            padding: 15px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+            border: 2px solid var(--soft);
+            border-radius: 10px;
+            padding: 20px;
             min-height: 100px;
             max-height: 200px;
             overflow-y: auto;
-            margin-top: 15px;
+            margin-top: 20px;
+            box-shadow: 0 2px 8px rgba(84, 119, 146, 0.1);
         }
 
         .transcript-box h3 {
-            color: #333;
-            margin-bottom: 10px;
-            font-size: 1.2em;
+            color: var(--navy);
+            margin-bottom: 15px;
+            font-size: 1em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .transcript-content {
-            color: #555;
-            line-height: 1.6;
+            color: var(--darker-steel);
+            line-height: 1.8;
+            font-size: 0.95em;
+            font-weight: 400;
         }
 
         .isl-tokens {
-            background: #e8f5e9;
-            color: #2e7d32;
-            font-weight: bold;
+            background: linear-gradient(135deg, var(--steel) 0%, var(--darker-steel) 100%);
+            border-color: var(--steel);
+            box-shadow: 0 4px 15px rgba(84, 119, 146, 0.3);
+        }
+
+        .isl-tokens h3 {
+            color: white;
+        }
+
+        .isl-tokens .transcript-content {
+            color: var(--light-blue);
+            font-weight: 500;
         }
 
         .status-indicator {
@@ -239,7 +412,7 @@
         }
 
         .status-indicator.recording {
-            background: #f44336;
+            background: #8B4444;
         }
 
         @keyframes pulse {
@@ -248,26 +421,61 @@
         }
 
         .alert {
-            padding: 12px 20px;
-            border-radius: 8px;
-            margin-bottom: 15px;
+            padding: 18px 24px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--steel);
+            font-weight: 400;
         }
 
         .alert-info {
-            background: #e3f2fd;
-            color: #1976d2;
-            border-left: 4px solid #1976d2;
+            background: linear-gradient(135deg, rgba(148, 180, 193, 0.15) 0%, rgba(184, 212, 227, 0.15) 100%);
+            color: var(--navy);
+            border-left-color: var(--steel);
         }
 
         .alert-success {
-            background: #e8f5e9;
-            color: #2e7d32;
-            border-left: 4px solid #2e7d32;
+            background: linear-gradient(135deg, rgba(84, 119, 146, 0.2) 0%, rgba(148, 180, 193, 0.2) 100%);
+            color: var(--dark-navy);
+            border-left-color: var(--steel);
+        }
+
+        #recording-status {
+            background: linear-gradient(135deg, var(--soft) 0%, var(--light-blue) 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border: 2px solid var(--steel);
+            box-shadow: 0 4px 15px rgba(84, 119, 146, 0.2);
+        }
+
+        #recording-status strong {
+            color: var(--dark-navy);
+            font-size: 1.1em;
+            font-weight: 600;
+        }
+
+        #recording-status p {
+            color: var(--navy);
+            margin-top: 10px;
+            font-weight: 400;
         }
 
         @media (max-width: 1024px) {
             .main-content {
                 grid-template-columns: 1fr;
+            }
+
+            .panel::before {
+                width: 100%;
+                height: 4px;
+            }
+
+            .header h1 {
+                font-size: 2em;
+            }
+
+            .header p {
+                font-size: 1em;
             }
         }
     </style>
@@ -275,14 +483,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🤟 VISTA</h1>
+            <h1>VISTA</h1>
             <p>Bridging the gap with Indian Sign Language Translation</p>
         </div>
 
         <div class="main-content">
             <!-- Input Panel -->
             <div class="panel">
-                <h2>📥 Input Source</h2>
+                <h2>Input Source</h2>
 
                 <div class="mode-selector">
                     <button class="mode-btn" data-mode="text">Text</button>
@@ -294,63 +502,63 @@
                 <!-- Text Input -->
                 <div class="input-section" id="text-input">
                     <textarea id="text-area" placeholder="Type your message here..."></textarea>
-                    <button class="btn btn-primary" onclick="processText()">🚀 Generate ISL Translation</button>
+                    <button class="btn btn-primary" onclick="processText()">Generate ISL Translation</button>
                 </div>
 
                 <!-- Audio Input -->
                 <div class="input-section" id="audio-input">
                     <div class="file-upload" onclick="document.getElementById('audio-file').click()">
                         <input type="file" id="audio-file" accept=".wav,.mp3,.m4a" onchange="handleFileSelect(this, 'audio')">
-                        <p>📁 Click to upload audio file</p>
+                        <p>Click to upload audio file</p>
                         <small>Supported: WAV, MP3, M4A</small>
                     </div>
-                    <button class="btn btn-primary" onclick="processFile('audio')" id="audio-process-btn" disabled>🚀 Generate ISL Translation</button>
+                    <button class="btn btn-primary" onclick="processFile('audio')" id="audio-process-btn" disabled>Generate ISL Translation</button>
                 </div>
 
                 <!-- Video Input -->
                 <div class="input-section" id="video-input">
                     <div class="file-upload" onclick="document.getElementById('video-file').click()">
                         <input type="file" id="video-file" accept=".mp4,.mov,.avi" onchange="handleFileSelect(this, 'video')">
-                        <p>📁 Click to upload video file</p>
+                        <p>Click to upload video file</p>
                         <small>Supported: MP4, MOV, AVI</small>
                     </div>
-                    <button class="btn btn-primary" onclick="processFile('video')" id="video-process-btn" disabled>🚀 Generate ISL Translation</button>
+                    <button class="btn btn-primary" onclick="processFile('video')" id="video-process-btn" disabled>Generate ISL Translation</button>
                 </div>
 
                 <!-- Real-time Input -->
                 <div class="input-section active" id="realtime-input">
                     <div class="alert alert-info">
-                        🎤 Click 'Start Recording' to begin real-time speech-to-ISL translation
+                        Click 'Start Recording' to begin real-time speech-to-ISL translation
                     </div>
-                    <button class="btn btn-primary" onclick="startRealtime()" id="start-btn">🎙️ Start Recording</button>
-                    <button class="btn btn-danger" onclick="stopRealtime()" id="stop-btn" style="display:none;">⏹️ Stop Recording</button>
+                    <button class="btn btn-primary" onclick="startRealtime()" id="start-btn">Start Recording</button>
+                    <button class="btn btn-danger" onclick="stopRealtime()" id="stop-btn" style="display:none;">Stop Recording</button>
                     <div id="recording-status" style="display:none; margin-top:15px; text-align:center;">
                         <span class="status-indicator recording"></span>
-                        <strong>RECORDING IN PROGRESS...</strong>
-                        <p style="margin-top:10px; color:#666;">Speak clearly into your microphone</p>
+                        <strong>RECORDING IN PROGRESS</strong>
+                        <p>Speak clearly into your microphone</p>
                     </div>
                 </div>
             </div>
 
             <!-- Output Panel -->
             <div class="panel">
-                <h2>📺 ISL Output</h2>
+                <h2>ISL Output</h2>
 
                 <div class="video-container" id="video-output">
                     <div class="video-placeholder">
-                        🎬 Videos will appear here
+                        Videos will appear here
                     </div>
                 </div>
 
                 <div class="transcript-box">
-                    <h3>📝 English Transcript</h3>
+                    <h3>English Transcript</h3>
                     <div class="transcript-content" id="transcript-content">
                         <em>Transcript will appear here...</em>
                     </div>
                 </div>
 
                 <div class="transcript-box isl-tokens">
-                    <h3>🔤 ISL Tokens</h3>
+                    <h3>ISL Tokens</h3>
                     <div class="transcript-content" id="isl-content">
                         <em>ISL tokens will appear here...</em>
                     </div>
@@ -450,7 +658,7 @@
                     <video autoplay style="max-width:100%; max-height:400px; border-radius:8px;">
                         <source src="${videoData.path}" type="video/mp4">
                     </video>
-                    <p style="color:#4CAF50; margin-top:10px;">Playing: ${videoData.filename}</p>
+                    <p style="color:#94B4C1; margin-top:10px;">Playing: ${videoData.filename}</p>
                 </div>
             `;
 
