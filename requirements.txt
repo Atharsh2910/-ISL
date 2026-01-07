@@ -6,12 +6,13 @@ Werkzeug==3.0.4
 
 # NLP
 spacy==3.7.2
-google-cloud-speech
-en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl
+blis==0.7.11
+thinc<8.3
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1-py3-none-any.whl
 
 # Speech to Text
 openai-whisper==20250625
-torch==2.8.0
+torch==2.1.2
 tiktoken==0.12.0
 
 # Video & Audio
@@ -27,6 +28,4 @@ tqdm==4.67.1
 requests==2.32.5
 python-dotenv==1.2.1
 pydantic<2.0
-# NOTE:
-# FFmpeg is required but must be installed separately (system dependency)
-blis==0.7.11
+
