@@ -100,6 +100,13 @@ def isl_tokens_to_clip_paths(isl_tokens):
                     if os.path.exists(letter_path):
                         clip_paths.append(letter_path)
     return clip_paths
+def split_into_sentences(text):
+    """
+    Splits text into sentences using spaCy sentence boundaries.
+    """
+    doc = nlp(text)
+    return [sent.text.strip() for sent in doc.sents if sent.text.strip()]
+
 
 # --- Microphone Stream ---
 class MicrophoneStream:
@@ -227,33 +234,37 @@ class RealtimeTranslator:
         
         while not self._stop_event.is_set():
             try:
-                sentence = self.text_queue.get(timeout=1)
-                if sentence is None:
+                text = self.text_queue.get(timeout=1)
+                if text is None:
                     break
-                
-                print(f"[ISL] Processing: {sentence}")
-                
-                # Convert to ISL
-                isl_tokens = english_to_isl(sentence)
-                isl_text = " ".join(isl_tokens)
-                print(f"[ISL] Tokens: {isl_text}")
-                
-                if self.on_isl_text:
-                    self.on_isl_text(isl_text)
-                
-                # Get video clips
-                clip_paths = isl_tokens_to_clip_paths(isl_tokens)
-                
-                if not clip_paths:
-                    print("[ISL] No clips found")
-                    continue
-                
-                # Queue videos with durations
-                for path in clip_paths:
-                    duration = get_video_duration(path)
-                    if duration > 0:
-                        self.video_queue.put((path, duration))
-                        print(f"[ISL] Queued: {os.path.basename(path)} ({duration:.2f}s)")
+
+                print(f"[ISL] Processing text block: {text}")
+
+                sentences = split_into_sentences(text)
+                print(f"[ISL] Detected sentences: {sentences}")
+
+                for sentence in sentences:
+                    print(f"[ISL] Processing sentence: {sentence}")
+
+                    isl_tokens = english_to_isl(sentence)
+                    isl_text = " ".join(isl_tokens)
+                    print(f"[ISL] Tokens: {isl_text}")
+
+                    if self.on_isl_text:
+                        self.on_isl_text(isl_text)
+
+                    clip_paths = isl_tokens_to_clip_paths(isl_tokens)
+
+                    if not clip_paths:
+                        print("[ISL] No clips found for sentence")
+                        continue
+
+                    for path in clip_paths:
+                        duration = get_video_duration(path)
+                        if duration > 0:
+                            self.video_queue.put((path, duration))
+                            print(f"[ISL] Queued: {os.path.basename(path)} ({duration:.2f}s)")
+
                 
             except queue.Empty:
                 continue
@@ -401,7 +412,8 @@ class ISLVideoApp:
         fps = cap.get(cv2.CAP_PROP_FPS)
         if fps == 0:
             fps = 30
-        delay = int(1000 / fps)
+        SLOW_FACTOR=1.3
+        delay = int((1000 / fps)*SLOW_FACTOR)
         
         while cap.isOpened() and self.is_playing:
             ret, frame = cap.read()
