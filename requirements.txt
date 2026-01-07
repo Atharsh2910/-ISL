@@ -29,3 +29,4 @@ python-dotenv==1.2.1
 pydantic<2.0
 # NOTE:
 # FFmpeg is required but must be installed separately (system dependency)
+blis==0.7.11
