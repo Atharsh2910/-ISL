@@ -7,6 +7,10 @@ RUN apt-get update && apt-get install -y \
     portaudio19-dev \
     build-essential \
     git \
+    tk \
+    tcl \
+    libtk8.6 \
+    libtcl8.6 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
